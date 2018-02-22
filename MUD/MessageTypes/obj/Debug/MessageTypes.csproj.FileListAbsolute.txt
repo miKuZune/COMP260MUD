@@ -1,0 +1,5 @@
+C:\Users\Max\Downloads\Lecture 03\Lecture 03\03.Chat system\MessageTypes\bin\Debug\MessageTypes.dll
+C:\Users\Max\Downloads\Lecture 03\Lecture 03\03.Chat system\MessageTypes\bin\Debug\MessageTypes.pdb
+C:\Users\Max\Downloads\Lecture 03\Lecture 03\03.Chat system\MessageTypes\obj\Debug\MessageTypes.csproj.CoreCompileInputs.cache
+C:\Users\Max\Downloads\Lecture 03\Lecture 03\03.Chat system\MessageTypes\obj\Debug\MessageTypes.dll
+C:\Users\Max\Downloads\Lecture 03\Lecture 03\03.Chat system\MessageTypes\obj\Debug\MessageTypes.pdb
