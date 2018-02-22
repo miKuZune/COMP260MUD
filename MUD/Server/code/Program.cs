@@ -170,30 +170,46 @@ namespace Server
         {
             if(input[1].ToLower() == "north" && currPlayer.currRoom.north != null)
             {
-                SendChatMessage(currPlayer.name + " has left the " + currPlayer.currRoom.Name + " and entered the " + currPlayer.currRoom.north);
+                //SendChatMessage(currPlayer.name + " has left the " + currPlayer.currRoom.Name + " and entered the " + currPlayer.currRoom.north);
                 currPlayer.currRoom = dungeon.roomMap[currPlayer.currRoom.north];
                 
             } else if(input[1].ToLower() == "south" && currPlayer.currRoom.south != null)
             {
-                SendChatMessage(currPlayer.name + " has left the " + currPlayer.currRoom.Name + " and entered the " + currPlayer.currRoom.south);
+                //SendChatMessage(currPlayer.name + " has left the " + currPlayer.currRoom.Name + " and entered the " + currPlayer.currRoom.south);
                 currPlayer.currRoom = dungeon.roomMap[currPlayer.currRoom.south];
             }
             else if (input[1].ToLower() == "east" && currPlayer.currRoom.east != null)
             {
-                SendChatMessage(currPlayer.name + " has left the " + currPlayer.currRoom.Name + " and entered the " + currPlayer.currRoom.east);
+                //SendChatMessage(currPlayer.name + " has left the " + currPlayer.currRoom.Name + " and entered the " + currPlayer.currRoom.east);
                 currPlayer.currRoom = dungeon.roomMap[currPlayer.currRoom.east];
             }
             else if (input[1].ToLower() == "west" && currPlayer.currRoom.west != null)
             {
-                SendChatMessage(currPlayer.name + " has left the " + currPlayer.currRoom.Name + " and entered the " + currPlayer.currRoom.west);
+                //SendChatMessage(currPlayer.name + " has left the " + currPlayer.currRoom.Name + " and entered the " + currPlayer.currRoom.west);
                 currPlayer.currRoom = dungeon.roomMap[currPlayer.currRoom.west];
             }
             else
             {
                 SendPrivateMessage(currPlayer.owner, "Server", "ERROR , you cannot go this direction");
             }
-
-            SendPrivateMessage(currPlayer.owner, "Server", "You are currently in " + currPlayer.currRoom.Name + ". " + currPlayer.currRoom.description);
+            string directions = "You can go ";
+            if(currPlayer.currRoom.north != null)
+            {
+                directions = directions + " north";
+            }
+            if (currPlayer.currRoom.south != null)
+            {
+                directions = directions + " south";
+            }
+            if (currPlayer.currRoom.east != null)
+            {
+                directions = directions + " east or ";
+            }
+            if (currPlayer.currRoom.west != null)
+            {
+                directions = directions + " west.";
+            }
+            SendPrivateMessage(currPlayer.owner, "Server", "You are currently in " + currPlayer.currRoom.Name + ". " + currPlayer.currRoom.description + directions);
         }
 
         static void CommandStates(string[] input, Socket chatClient)
@@ -351,10 +367,8 @@ namespace Server
                             currPlayer = playerList[i];
                         }
                     }
-
                     SendPrivateMessage(currPlayer.owner, "Server", "You start in " + currPlayer.currRoom.Name + ". " + currPlayer.currRoom.description + " " + DisplayPlayerLocations());
                     
-
                     SendClientName(serverClient, clientName);
                     Thread.Sleep(500);
                     SendClientList();

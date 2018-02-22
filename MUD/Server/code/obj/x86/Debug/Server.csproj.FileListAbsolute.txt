@@ -6,3 +6,11 @@ C:\Users\Max\Downloads\Lecture 03\Lecture 03\03.Chat system\Server\code\obj\x86\
 C:\Users\Max\Downloads\Lecture 03\Lecture 03\03.Chat system\Server\code\obj\x86\Debug\Server.csproj.CoreCompileInputs.cache
 C:\Users\Max\Downloads\Lecture 03\Lecture 03\03.Chat system\Server\code\obj\x86\Debug\Server.exe
 C:\Users\Max\Downloads\Lecture 03\Lecture 03\03.Chat system\Server\code\obj\x86\Debug\Server.pdb
+D:\miKu\COMP260MUD\MUD\Server\code\bin\Debug\Server.exe
+D:\miKu\COMP260MUD\MUD\Server\code\bin\Debug\Server.pdb
+D:\miKu\COMP260MUD\MUD\Server\code\bin\Debug\MessageTypes.dll
+D:\miKu\COMP260MUD\MUD\Server\code\bin\Debug\MessageTypes.pdb
+D:\miKu\COMP260MUD\MUD\Server\code\obj\x86\Debug\Server.csprojResolveAssemblyReference.cache
+D:\miKu\COMP260MUD\MUD\Server\code\obj\x86\Debug\Server.csproj.CoreCompileInputs.cache
+D:\miKu\COMP260MUD\MUD\Server\code\obj\x86\Debug\Server.exe
+D:\miKu\COMP260MUD\MUD\Server\code\obj\x86\Debug\Server.pdb

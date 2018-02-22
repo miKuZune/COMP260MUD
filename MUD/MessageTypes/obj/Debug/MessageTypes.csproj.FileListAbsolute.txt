@@ -3,3 +3,9 @@ C:\Users\Max\Downloads\Lecture 03\Lecture 03\03.Chat system\MessageTypes\bin\Deb
 C:\Users\Max\Downloads\Lecture 03\Lecture 03\03.Chat system\MessageTypes\obj\Debug\MessageTypes.csproj.CoreCompileInputs.cache
 C:\Users\Max\Downloads\Lecture 03\Lecture 03\03.Chat system\MessageTypes\obj\Debug\MessageTypes.dll
 C:\Users\Max\Downloads\Lecture 03\Lecture 03\03.Chat system\MessageTypes\obj\Debug\MessageTypes.pdb
+D:\miKu\COMP260MUD\MUD\MessageTypes\bin\Debug\MessageTypes.dll
+D:\miKu\COMP260MUD\MUD\MessageTypes\bin\Debug\MessageTypes.pdb
+D:\miKu\COMP260MUD\MUD\MessageTypes\obj\Debug\MessageTypes.csprojResolveAssemblyReference.cache
+D:\miKu\COMP260MUD\MUD\MessageTypes\obj\Debug\MessageTypes.csproj.CoreCompileInputs.cache
+D:\miKu\COMP260MUD\MUD\MessageTypes\obj\Debug\MessageTypes.dll
+D:\miKu\COMP260MUD\MUD\MessageTypes\obj\Debug\MessageTypes.pdb

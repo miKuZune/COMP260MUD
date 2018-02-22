@@ -8,3 +8,14 @@ C:\Users\Max\Downloads\Lecture 03\Lecture 03\03.Chat system\Winform Client\Winfo
 C:\Users\Max\Downloads\Lecture 03\Lecture 03\03.Chat system\Winform Client\Winform Client\obj\x86\Debug\Winform Client.csproj.CoreCompileInputs.cache
 C:\Users\Max\Downloads\Lecture 03\Lecture 03\03.Chat system\Winform Client\Winform Client\obj\x86\Debug\Winform Client.exe
 C:\Users\Max\Downloads\Lecture 03\Lecture 03\03.Chat system\Winform Client\Winform Client\obj\x86\Debug\Winform Client.pdb
+D:\miKu\COMP260MUD\MUD\Winform Client\Winform Client\bin\Debug\Winform Client.exe
+D:\miKu\COMP260MUD\MUD\Winform Client\Winform Client\bin\Debug\Winform Client.pdb
+D:\miKu\COMP260MUD\MUD\Winform Client\Winform Client\bin\Debug\MessageTypes.dll
+D:\miKu\COMP260MUD\MUD\Winform Client\Winform Client\bin\Debug\MessageTypes.pdb
+D:\miKu\COMP260MUD\MUD\Winform Client\Winform Client\obj\x86\Debug\Winform Client.csprojResolveAssemblyReference.cache
+D:\miKu\COMP260MUD\MUD\Winform Client\Winform Client\obj\x86\Debug\Winform_Client.Form1.resources
+D:\miKu\COMP260MUD\MUD\Winform Client\Winform Client\obj\x86\Debug\Winform_Client.Properties.Resources.resources
+D:\miKu\COMP260MUD\MUD\Winform Client\Winform Client\obj\x86\Debug\Winform Client.csproj.GenerateResource.Cache
+D:\miKu\COMP260MUD\MUD\Winform Client\Winform Client\obj\x86\Debug\Winform Client.csproj.CoreCompileInputs.cache
+D:\miKu\COMP260MUD\MUD\Winform Client\Winform Client\obj\x86\Debug\Winform Client.exe
+D:\miKu\COMP260MUD\MUD\Winform Client\Winform Client\obj\x86\Debug\Winform Client.pdb

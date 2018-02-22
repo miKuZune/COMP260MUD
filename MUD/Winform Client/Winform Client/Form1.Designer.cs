@@ -1,4 +1,5 @@
-﻿namespace Winform_Client
+﻿using Winform_Client;
+namespace Winform_Client
 {
     partial class Form1
     {
@@ -59,6 +60,7 @@
             this.textBox_Output.Name = "textBox_Output";
             this.textBox_Output.Size = new System.Drawing.Size(384, 235);
             this.textBox_Output.TabIndex = 3;
+            this.textBox_Output.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             // 
             // textBox_ClientName
             // 
