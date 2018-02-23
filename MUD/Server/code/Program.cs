@@ -176,14 +176,17 @@ namespace Server
                 if(enemy == currPlayer.currRoom.enemyList[i].GetName())
                 {
                     enemyIsValid = true;
+                    damageToDeal = currPlayer.GetDamage();
                     currPlayer.currRoom.enemyList[i].enemyHealth.TakeHealth(damageToDeal);
                     string message = currPlayer.name + " attacked " + currPlayer.currRoom.enemyList[i].GetName() + " for " + damageToDeal + ". ";
                     SendChatMessage(message);
+                    string deadMessage = "";
+                    string enemiesInRoom = "";
+                    string enemyAttackBack = "";
 
                     if(currPlayer.currRoom.enemyList[i].enemyHealth.IsDead())
                     {
-                        string deadMessage = currPlayer.currRoom.enemyList[i].GetName() + " has been slain! ";
-                        string enemiesInRoom = "";
+                        deadMessage = currPlayer.currRoom.enemyList[i].GetName() + " has been slain! ";
 
                         currPlayer.currRoom.enemyList.Remove(currPlayer.currRoom.enemyList[i]);
 
@@ -192,7 +195,6 @@ namespace Server
                             enemiesInRoom = "The enemies in the room are now: ";
                             for (int j = 0; j < currPlayer.currRoom.enemyList.Count; j++)
                             {
-                                
                                 enemiesInRoom = enemiesInRoom + currPlayer.currRoom.enemyList[j].GetName() + " ";
                             }
                         }
@@ -202,8 +204,22 @@ namespace Server
                         }
                         
 
-                        SendChatMessage(deadMessage + enemiesInRoom);
+                        
                     }
+                    else
+                    {
+                        int damage = currPlayer.currRoom.enemyList[i].GetRandomDamgeInRange();
+                        currPlayer.currRoom.enemyList[i].EnemyAttack(currPlayer, damage);
+                        enemyAttackBack = currPlayer.name + "has been hit by " + currPlayer.currRoom.enemyList[i].GetName() + " for " + damage + ". Player now has " + currPlayer.playerHealth.GetHealth() + " health. " ;
+                        if(currPlayer.playerHealth.IsDead())
+                        {
+                            SendChatMessage(currPlayer.name + " has died and has been sent back to the start.");
+                            currPlayer.playerHealth.SetHealth(100);
+                            currPlayer.currRoom = dungeon.roomMap["Outside the cave"];
+                        }
+                        //SendChatMessage(currPlayer.name + "has been hit by " + currPlayer.currRoom.enemyList[i].GetName() + " for " + damage);
+                    }
+                    SendChatMessage(deadMessage + enemiesInRoom + enemyAttackBack);
                 }
             }
 

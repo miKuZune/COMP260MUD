@@ -40,7 +40,7 @@ namespace Server
             }
 
             {
-                Enemy skeleton = new Enemy("Skeleton", 10, 5, 15);
+                Enemy skeleton = new Enemy("Skeleton", 25, 5, 15);
 
                 var room = new Room("Side cave", "A small side cave. A pool of water sits in the middle. Droplets fall from the ceiling to the pool periodically. ", 2, skeleton);
                 room.east = "Cave entrance";

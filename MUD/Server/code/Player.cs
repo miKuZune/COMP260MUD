@@ -17,6 +17,16 @@ namespace Server
             this.currRoom = currRoom;
         }
 
+        public int GetDamage()
+        {
+            int damage = 0;
+
+            Random ran = new Random();
+            damage = ran.Next(minDamage, maxDamage);
+
+            return damage;
+        }
+
         //Variables
         public Socket owner;
         public String name;
@@ -24,5 +34,8 @@ namespace Server
         public Room currRoom;
 
         public Health playerHealth = new Health(100);
+
+        public int minDamage = 10;
+        public int maxDamage = 25;
     }
 }

@@ -15,13 +15,19 @@ namespace Server
             this.maxDamage = maxDmg;
         }
 
-        public void EnemyAttack(Player attackPlayer)
+        public int GetRandomDamgeInRange()
         {
-            int damageToDeal = 0;
-            Random ran = new Random();
-            damageToDeal = ran.Next(minDamage, maxDamage);
+            int damage = 0;
 
-            attackPlayer.playerHealth.TakeHealth(damageToDeal);
+            Random ran = new Random();
+            damage = ran.Next(minDamage, maxDamage);
+
+            return damage;
+        }
+
+        public void EnemyAttack(Player attackPlayer, int damage)
+        {
+            attackPlayer.playerHealth.TakeHealth(damage);
         }
 
         public void SetName(string name)
