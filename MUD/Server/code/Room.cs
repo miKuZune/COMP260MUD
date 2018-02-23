@@ -7,10 +7,17 @@ namespace Server
 {
     public class Room
     {
-        public Room(String name, String description)
+        public Room(String name, String description, int numOfEnemies, Enemy enemy)
         {
             this.Name = name;
             this.description = description;
+            this.enemies = new Enemy[numOfEnemies];
+
+            for(int i = 0; i < numOfEnemies; i++)
+            {
+                this.enemies[i] = enemy;
+                this.enemies[i].SetName(enemy.GetName() + " " + (i + 1));
+            }
         }
         public String north
         {
@@ -39,5 +46,7 @@ namespace Server
 
         public String[] exits = new String[4];
         public static String[] exitNames = { "NORTH", "SOUTH", "EAST", "WEST" };
+
+        public Enemy[] enemies;
     }
 }

@@ -8,7 +8,7 @@ using System.Net.Sockets;
 
 namespace Server
 {
-    class Player
+    public class Player
     {
         public Player(Socket owner,String name, Room currRoom)
         {
@@ -22,5 +22,7 @@ namespace Server
         public String name;
 
         public Room currRoom;
+
+        public Health playerHealth = new Health(100);
     }
 }
