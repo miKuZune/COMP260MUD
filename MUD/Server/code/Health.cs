@@ -12,6 +12,18 @@ namespace Server
             this.health = startHealth;
         }
 
+        public bool IsDead()
+        {
+            if(health <= 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         public int GetHealth()
         {
             return health;
@@ -23,6 +35,7 @@ namespace Server
         public void TakeHealth(int damage)
         {
             this.health -= damage;
+
         }
         public void AddHealth(int health)
         {

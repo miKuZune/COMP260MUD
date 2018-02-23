@@ -40,7 +40,9 @@ namespace Server
             }
 
             {
-                var room = new Room("Side cave", "A small side cave. A pool of water sits in the middle. Droplets fall from the ceiling to the pool periodically. ", 0, null);
+                Enemy skeleton = new Enemy("Skeleton", 10, 5, 15);
+
+                var room = new Room("Side cave", "A small side cave. A pool of water sits in the middle. Droplets fall from the ceiling to the pool periodically. ", 2, skeleton);
                 room.east = "Cave entrance";
 
                 roomMap.Add(room.Name, room);
@@ -55,7 +57,8 @@ namespace Server
                 roomMap.Add(room.Name, room);
             }
             {
-                var room = new Room("Cave of gems", "A large cavern of gems spreads before. Beautiful glowing crystals fill the room, lighting your way.", 0, null);
+                Enemy gemWarriors = new Enemy("Gem Warrior", 40, 0, 5);
+                var room = new Room("Cave of gems", "A large cavern of gems spreads before. Beautiful glowing crystals fill the room, lighting your way.", 4, gemWarriors);
                 //room.north = "";
                 room.south = "Dark passageway";
                 room.west = "Second dark passageway";
@@ -74,7 +77,9 @@ namespace Server
                 roomMap.Add(room.Name, room);
             }
             {
-                var room = new Room("Gem trap room", "Another large room filled with gems and an ominous bolder seemingly floating from the ceiling.", 0, null);
+                Enemy gemWarriors = new Enemy("Gem Warrior", 40, 0, 5);
+
+                var room = new Room("Gem trap room", "Another large room filled with gems and an ominous bolder seemingly floating from the ceiling.", 5, gemWarriors);
                 room.north = "Gem passageway";
                 //room.south = "";
                 //room.west = "";

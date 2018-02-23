@@ -36,8 +36,8 @@ namespace Server
         //Variables
         String name;
 
-        Health enemyHealth = new Health(0);
-        int minDamage;
-        int maxDamage;
+        public Health enemyHealth = new Health(0);
+        public int minDamage;
+        public int maxDamage;
     }
 }

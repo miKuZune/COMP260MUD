@@ -165,6 +165,54 @@ namespace Server
             }
         }
 
+        static void Attack(string[] input, Player currPlayer)
+        {
+            int damageToDeal = 20;
+            bool enemyIsValid = false;
+            string enemy = input[1];
+
+            for(int i = 0; i < currPlayer.currRoom.enemyList.Count; i++)
+            {
+                if(enemy == currPlayer.currRoom.enemyList[i].GetName())
+                {
+                    enemyIsValid = true;
+                    currPlayer.currRoom.enemyList[i].enemyHealth.TakeHealth(damageToDeal);
+                    string message = currPlayer.name + " attacked " + currPlayer.currRoom.enemyList[i].GetName() + " for " + damageToDeal + ". ";
+                    SendChatMessage(message);
+
+                    if(currPlayer.currRoom.enemyList[i].enemyHealth.IsDead())
+                    {
+                        string deadMessage = currPlayer.currRoom.enemyList[i].GetName() + " has been slain! ";
+                        string enemiesInRoom = "";
+
+                        currPlayer.currRoom.enemyList.Remove(currPlayer.currRoom.enemyList[i]);
+
+                        if(currPlayer.currRoom.enemyList.Count > 0)
+                        {
+                            enemiesInRoom = "The enemies in the room are now: ";
+                            for (int j = 0; j < currPlayer.currRoom.enemyList.Count; j++)
+                            {
+                                
+                                enemiesInRoom = enemiesInRoom + currPlayer.currRoom.enemyList[j].GetName() + " ";
+                            }
+                        }
+                        else
+                        {
+                            enemiesInRoom = "There are no more enemies in the room.";
+                        }
+                        
+
+                        SendChatMessage(deadMessage + enemiesInRoom);
+                    }
+                }
+            }
+
+            if(!enemyIsValid)
+            {
+                SendPrivateMessage(currPlayer.owner, "Server", "That enemy is not valid");
+            }
+        }
+
 
         static void MoveRoom(Player currPlayer, string[] input)
         {
@@ -192,6 +240,17 @@ namespace Server
             {
                 SendPrivateMessage(currPlayer.owner, "Server", "ERROR , you cannot go this direction");
             }
+            string enemies = "";
+
+            if(currPlayer.currRoom.enemyList.Count > 0)
+            {
+                enemies = "You see several enemies in the room: ";
+                for(int i = 0; i < currPlayer.currRoom.enemyList.Count; i++)
+                {
+                    enemies = enemies + currPlayer.currRoom.enemyList[i].GetName() + " ";
+                }
+            }
+
             string directions = "You can go ";
             if(currPlayer.currRoom.north != null)
             {
@@ -209,7 +268,7 @@ namespace Server
             {
                 directions = directions + " west.";
             }
-            SendPrivateMessage(currPlayer.owner, "Server", "You are currently in " + currPlayer.currRoom.Name + ". " + currPlayer.currRoom.description + directions);
+            SendPrivateMessage(currPlayer.owner, "Server", "You are currently in " + currPlayer.currRoom.Name + ". " + currPlayer.currRoom.description + enemies +  directions);
         }
 
         static void CommandStates(string[] input, Socket chatClient)
@@ -219,6 +278,15 @@ namespace Server
                 case "help":
                     SendPrivateMessage(chatClient, "Server", "The commands are: " );
                     SendPrivateMessage(chatClient, "Server", "Go [direction] - Moves in given direction; Say [Text to say] - writes to all players; rename [New name] - gives yourself a new name; players - displays all current players names and locations");
+                    break;
+                case "attack":
+                    for (int i = 0; i < playerList.Count; i++)
+                    {
+                        if (playerList[i].owner == chatClient)
+                        {
+                            Attack(input, playerList[i]);
+                        }
+                    }
                     break;
                 case "go":
                     string direction = input[1];

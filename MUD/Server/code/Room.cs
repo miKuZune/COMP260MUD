@@ -11,12 +11,14 @@ namespace Server
         {
             this.Name = name;
             this.description = description;
-            this.enemies = new Enemy[numOfEnemies];
+            //this.enemies = new Enemy[numOfEnemies];
 
             for(int i = 0; i < numOfEnemies; i++)
             {
-                this.enemies[i] = enemy;
-                this.enemies[i].SetName(enemy.GetName() + " " + (i + 1));
+                int enemyID = i + 1;
+                Enemy enemyToAdd = new Enemy(enemy.GetName() + enemyID, enemy.enemyHealth.GetHealth(), enemy.minDamage, enemy.maxDamage);
+                enemyList.Add(enemyToAdd);
+                //this.enemies[i] = new Enemy(enemy.GetName() + enemyID, enemy.enemyHealth.GetHealth(), enemy.minDamage, enemy.maxDamage);
             }
         }
         public String north
@@ -47,6 +49,7 @@ namespace Server
         public String[] exits = new String[4];
         public static String[] exitNames = { "NORTH", "SOUTH", "EAST", "WEST" };
 
-        public Enemy[] enemies;
+        //public Enemy[] enemies;
+        public List<Enemy> enemyList = new List<Enemy>();
     }
 }
