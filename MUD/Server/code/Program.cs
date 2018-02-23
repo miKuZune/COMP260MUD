@@ -229,6 +229,22 @@ namespace Server
             }
         }
 
+        static void SpeakToPeopleInRoom(string[] input, Player currPlayer)
+        {
+            string wordsToSay = "" + currPlayer.name + ": ";
+            for(int i = 1; i < input.Length; i++)
+            {
+                wordsToSay = wordsToSay + input[i];
+            }
+
+            for(int i = 0; i < playerList.Count; i++)
+            {
+                if(playerList[i].currRoom == currPlayer.currRoom && playerList[i].owner != currPlayer.owner)
+                {
+                    SendPrivateMessage(playerList[i].owner, "" + currPlayer.name, wordsToSay);
+                }
+            }
+        }
 
         static void MoveRoom(Player currPlayer, string[] input)
         {
@@ -316,12 +332,19 @@ namespace Server
                     }
                     break;
                 case "say":
-                    string outputLine = GetNameFromSocket(chatClient) + ": ";
+                    /*string outputLine = GetNameFromSocket(chatClient) + ": ";
                     for(int i = 1; i < input.Length; i++)
                     {
                         outputLine = outputLine + input[i] + ' ';
                     }
-                    SendChatMessage(outputLine);
+                    SendChatMessage(outputLine);*/
+                    for (int i = 0; i < playerList.Count; i++)
+                    {
+                        if (playerList[i].owner == chatClient)
+                        {
+                            SpeakToPeopleInRoom(input, playerList[i]);
+                        }
+                    }
                     break;
                 case "rename":
                     Rename(chatClient, input[1]);
