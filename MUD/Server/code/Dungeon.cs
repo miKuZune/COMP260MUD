@@ -5,21 +5,16 @@ using System.Text;
 
 namespace Server
 {
-    /*var room = new Room("", "");
-                //room.north = "";
-                //room.south = "";
-                //room.west = "";
-                //room.east = "";
-
-                roomMap.Add(room.Name, room);*/
     public class Dungeon
     {
+        //Dungeon dictionary to contain all the rooms.
         public Dictionary<String, Room> roomMap;
 
+        //Intialise dungeon.
         public void Init()
         {
             roomMap = new Dictionary<string, Room>();
-
+            //Add rooms to dungeon.
             {
                 var room = new Room("Outside the cave", "A large cave entrance stands before you. ", 0, null);
                 room.north = "Cave entrance";

@@ -7,6 +7,7 @@ namespace Server
 {
     public class Room
     {
+        //Room initalistaion
         public Room(String name, String description, int numOfEnemies, Enemy enemy)
         {
             this.Name = name;
@@ -21,6 +22,7 @@ namespace Server
                 //this.enemies[i] = new Enemy(enemy.GetName() + enemyID, enemy.enemyHealth.GetHealth(), enemy.minDamage, enemy.maxDamage);
             }
         }
+        //Get and set the possible directions of the room.
         public String north
         {
             get { return exits[0]; }
@@ -49,7 +51,6 @@ namespace Server
         public String[] exits = new String[4];
         public static String[] exitNames = { "NORTH", "SOUTH", "EAST", "WEST" };
 
-        //public Enemy[] enemies;
         public List<Enemy> enemyList = new List<Enemy>();
     }
 }

@@ -7,6 +7,7 @@ namespace Server
 {
     public class Enemy
     {
+        //Enemy intialisation
         public Enemy(string name, int startHealth, int minDmg, int maxDmg)
         {
             this.name = name;
@@ -14,7 +15,7 @@ namespace Server
             this.minDamage = minDmg;
             this.maxDamage = maxDmg;
         }
-
+        //Gets an integer for damage to deal
         public int GetRandomDamgeInRange()
         {
             int damage = 0;
@@ -24,12 +25,13 @@ namespace Server
 
             return damage;
         }
-
+        //Deals damage to the given player.
         public void EnemyAttack(Player attackPlayer, int damage)
         {
             attackPlayer.playerHealth.TakeHealth(damage);
         }
-
+        
+        //Get and set the name of the enemy
         public void SetName(string name)
         {
             this.name = name;

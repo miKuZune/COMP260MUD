@@ -10,13 +10,14 @@ namespace Server
 {
     public class Player
     {
+        //Player initilisation
         public Player(Socket owner,String name, Room currRoom)
         {
             this.owner = owner;
             this.name = name;
             this.currRoom = currRoom;
         }
-
+        //Returns an integer for the amount of damage a player can deal.
         public int GetDamage()
         {
             int damage = 0;
