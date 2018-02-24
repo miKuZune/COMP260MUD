@@ -43,9 +43,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AttackManager.cs" />
     <Compile Include="Dungeon.cs" />
     <Compile Include="Enemy.cs" />
     <Compile Include="Health.cs" />
+    <Compile Include="MoveRoomManager.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -57,7 +57,7 @@ namespace Server
                 roomMap.Add(room.Name, room);
             }
             {
-                Enemy gemWarriors = new Enemy("Gem Warrior", 40, 0, 5);
+                Enemy gemWarriors = new Enemy("GemWarrior", 40, 0, 5);
                 var room = new Room("Cave of gems", "A large cavern of gems spreads before. Beautiful glowing crystals fill the room, lighting your way.", 4, gemWarriors);
                 //room.north = "";
                 room.south = "Dark passageway";

@@ -24,17 +24,19 @@ namespace Server
 
         static bool firstPlayerHasConnect = false;
 
+        //Returns a string containg players names and locations in the dungeon.
         static string DisplayPlayerLocations()
         {
             string print = "";
             for(int i = 0; i < playerList.Count; i++)
             {
-                print = print + "\n " + playerList[i].name + " is currently located at " + playerList[i].currRoom.Name;
+                print = print + playerList[i].name + " is currently located at " + playerList[i].currRoom.Name;
             }
             return print;
 
         }
 
+        //Changes the player name, and sends a message to everyone that this change has occured.
         static void Rename(Socket currPlayer, string newName)
         {
             for(int i = 0; i < playerList.Count; i++)
@@ -165,73 +167,65 @@ namespace Server
             }
         }
 
+        //Checks if the enemy to attack is valid, if so attacks that enemy. Also handles enemy death and enemies attacking the player back.
         static void Attack(string[] input, Player currPlayer)
         {
-            int damageToDeal = 20;
+            //Holds the parameter for the enemy to attack
+            string enemy = input[1].ToLower();
+            //Used to send a message to the player if no enemy is found.
             bool enemyIsValid = false;
-            string enemy = input[1];
 
+            //Goes through the enemies in the room to find the one the player typed, if valid.
             for(int i = 0; i < currPlayer.currRoom.enemyList.Count; i++)
             {
-                if(enemy == currPlayer.currRoom.enemyList[i].GetName())
+                if(enemy == currPlayer.currRoom.enemyList[i].GetName().ToLower())
                 {
-                    enemyIsValid = true;
-                    damageToDeal = currPlayer.GetDamage();
-                    currPlayer.currRoom.enemyList[i].enemyHealth.TakeHealth(damageToDeal);
-                    string message = currPlayer.name + " attacked " + currPlayer.currRoom.enemyList[i].GetName() + " for " + damageToDeal + ". ";
-                    SendChatMessage(message);
+                    //Holds the messages which will be sent to players as a result of the attack.
+                    string playerAttackMessage = "";
                     string deadMessage = "";
-                    string enemiesInRoom = "";
                     string enemyAttackBack = "";
 
+                    enemyIsValid = true;
+                    AttackManager AM = new AttackManager(currPlayer, currPlayer.currRoom.enemyList[i]);
+
+                    playerAttackMessage = AM.PlayerAttack(currPlayer.GetDamage());
+                    SendChatMessage(playerAttackMessage);
+
+                    //If enemy is killed prints to the player
                     if(currPlayer.currRoom.enemyList[i].enemyHealth.IsDead())
                     {
-                        deadMessage = currPlayer.currRoom.enemyList[i].GetName() + " has been slain! ";
-
-                        currPlayer.currRoom.enemyList.Remove(currPlayer.currRoom.enemyList[i]);
-
-                        if(currPlayer.currRoom.enemyList.Count > 0)
-                        {
-                            enemiesInRoom = "The enemies in the room are now: ";
-                            for (int j = 0; j < currPlayer.currRoom.enemyList.Count; j++)
-                            {
-                                enemiesInRoom = enemiesInRoom + currPlayer.currRoom.enemyList[j].GetName() + " ";
-                            }
-                        }
-                        else
-                        {
-                            enemiesInRoom = "There are no more enemies in the room.";
-                        }
-                        
-
-                        
+                        deadMessage = AM.OnEnemyDead();
                     }
+                    //If the enemy is not killed they will attack the player back.
                     else
                     {
                         int damage = currPlayer.currRoom.enemyList[i].GetRandomDamgeInRange();
-                        currPlayer.currRoom.enemyList[i].EnemyAttack(currPlayer, damage);
-                        enemyAttackBack = currPlayer.name + "has been hit by " + currPlayer.currRoom.enemyList[i].GetName() + " for " + damage + ". Player now has " + currPlayer.playerHealth.GetHealth() + " health. " ;
-                        if(currPlayer.playerHealth.IsDead())
+
+                        enemyAttackBack = AM.EnemyAttackPlayer(damage);
+
+                        //If the player dies from this attack a message is sent to everyone, the player's health is then reset and they are sent to the start of the dungeon.
+                        if (currPlayer.playerHealth.IsDead())
                         {
-                            SendChatMessage(currPlayer.name + " has died and has been sent back to the start.");
-                            currPlayer.playerHealth.SetHealth(100);
+                            SendChatMessage( deadMessage + enemyAttackBack + AM.OnPlayerDeath());
                             currPlayer.currRoom = dungeon.roomMap["Outside the cave"];
                         }
-                        //SendChatMessage(currPlayer.name + "has been hit by " + currPlayer.currRoom.enemyList[i].GetName() + " for " + damage);
                     }
-                    SendChatMessage(deadMessage + enemiesInRoom + enemyAttackBack);
+                    SendChatMessage(deadMessage + enemyAttackBack);
                 }
             }
 
+            //Printed if the input is not valid.
             if(!enemyIsValid)
             {
                 SendPrivateMessage(currPlayer.owner, "Server", "That enemy is not valid");
             }
         }
 
+        //Sends private messages to everyone in the same room as the player
         static void SpeakToPeopleInRoom(string[] input, Player currPlayer)
         {
             string wordsToSay = "" + currPlayer.name + ": ";
+
             for(int i = 1; i < input.Length; i++)
             {
                 wordsToSay = wordsToSay + input[i];
@@ -246,115 +240,69 @@ namespace Server
             }
         }
 
+        //Moves the player from their location to a new room, if the input is valid
         static void MoveRoom(Player currPlayer, string[] input)
         {
-            if(input[1].ToLower() == "north" && currPlayer.currRoom.north != null)
-            {
-                //SendChatMessage(currPlayer.name + " has left the " + currPlayer.currRoom.Name + " and entered the " + currPlayer.currRoom.north);
-                currPlayer.currRoom = dungeon.roomMap[currPlayer.currRoom.north];
-                
-            } else if(input[1].ToLower() == "south" && currPlayer.currRoom.south != null)
-            {
-                //SendChatMessage(currPlayer.name + " has left the " + currPlayer.currRoom.Name + " and entered the " + currPlayer.currRoom.south);
-                currPlayer.currRoom = dungeon.roomMap[currPlayer.currRoom.south];
-            }
-            else if (input[1].ToLower() == "east" && currPlayer.currRoom.east != null)
-            {
-                //SendChatMessage(currPlayer.name + " has left the " + currPlayer.currRoom.Name + " and entered the " + currPlayer.currRoom.east);
-                currPlayer.currRoom = dungeon.roomMap[currPlayer.currRoom.east];
-            }
-            else if (input[1].ToLower() == "west" && currPlayer.currRoom.west != null)
-            {
-                //SendChatMessage(currPlayer.name + " has left the " + currPlayer.currRoom.Name + " and entered the " + currPlayer.currRoom.west);
-                currPlayer.currRoom = dungeon.roomMap[currPlayer.currRoom.west];
-            }
-            else
-            {
-                SendPrivateMessage(currPlayer.owner, "Server", "ERROR , you cannot go this direction");
-            }
-            string enemies = "";
+            MoveRoomManager MRM = new MoveRoomManager(currPlayer, input);
 
-            if(currPlayer.currRoom.enemyList.Count > 0)
+            //Checks if there are any enemies in the room and stops the player from leaving if there are.
+            if(MRM.CheckForEnemiesInRoom())
             {
-                enemies = "You see several enemies in the room: ";
-                for(int i = 0; i < currPlayer.currRoom.enemyList.Count; i++)
-                {
-                    enemies = enemies + currPlayer.currRoom.enemyList[i].GetName() + " ";
-                }
+                SendPrivateMessage(currPlayer.owner, "Server", "You cannot leave while there are enemies in the room");
+                return;
             }
 
-            string directions = "You can go ";
-            if(currPlayer.currRoom.north != null)
-            {
-                directions = directions + " north";
-            }
-            if (currPlayer.currRoom.south != null)
-            {
-                directions = directions + " south";
-            }
-            if (currPlayer.currRoom.east != null)
-            {
-                directions = directions + " east or ";
-            }
-            if (currPlayer.currRoom.west != null)
-            {
-                directions = directions + " west.";
-            }
-            SendPrivateMessage(currPlayer.owner, "Server", "You are currently in " + currPlayer.currRoom.Name + ". " + currPlayer.currRoom.description + enemies +  directions);
+            //Checks if the input parameter is valid. IF valid moves the player to the next room. If not valid sends a private error message to the client.
+            string validRoomMessage = MRM.MoveRoom(dungeon.roomMap);
+            if(validRoomMessage != null){SendPrivateMessage(currPlayer.owner, "Server", "ERROR , you cannot go this direction");}
+
+            string sendString = "You are currently in " + currPlayer.currRoom.Name + AddIndent() +  currPlayer.currRoom.description + AddIndent() + MRM.ListEnemiesInRoom() + AddIndent() + MRM.GetPlayersInRoom(playerList) + AddIndent() + MRM.GetPossibleDirections();
+
+            SendPrivateMessage(currPlayer.owner ,"Server" ,sendString);
         }
 
+        //Returns a string to indent a message.
+        static string AddIndent()
+        {
+            string indent = "       ";
+
+            return indent;
+        }
+        
+        //Takes players input and performs appropriate commands if valid.    
         static void CommandStates(string[] input, Socket chatClient)
         {
             switch(input[0])
             {
                 case "help":
+                    //Gives the player a message containing all the possible commands
                     SendPrivateMessage(chatClient, "Server", "The commands are: " );
-                    SendPrivateMessage(chatClient, "Server", "Go [direction] - Moves in given direction; Say [Text to say] - writes to all players; rename [New name] - gives yourself a new name; players - displays all current players names and locations");
+                    SendPrivateMessage(chatClient, "Server", "Go [direction] - Moves in given direction; Say [Text to say] - writes to all players; rename [New name] - gives yourself a new name; players - displays all current players names and locations; attack [enemy name] - attacks the enemy chosen");
                     break;
                 case "attack":
-                    for (int i = 0; i < playerList.Count; i++)
-                    {
-                        if (playerList[i].owner == chatClient)
-                        {
-                            Attack(input, playerList[i]);
-                        }
-                    }
+                    //Gets the current player then trys to attack the chosen enemy.
+                    Attack(input, GetCurrentPlayer(chatClient));
                     break;
                 case "go":
-                    string direction = input[1];
-
-                    for(int i = 0; i < playerList.Count; i++)
-                    {
-                        if(playerList[i].owner == chatClient)
-                        {
-                            MoveRoom(playerList[i], input);
-                        }
-                    }
+                    //Gets the current player and trys to move them in the given direction.
+                    MoveRoom(GetCurrentPlayer(chatClient), input);
                     break;
                 case "say":
-                    /*string outputLine = GetNameFromSocket(chatClient) + ": ";
-                    for(int i = 1; i < input.Length; i++)
-                    {
-                        outputLine = outputLine + input[i] + ' ';
-                    }
-                    SendChatMessage(outputLine);*/
-                    for (int i = 0; i < playerList.Count; i++)
-                    {
-                        if (playerList[i].owner == chatClient)
-                        {
-                            SpeakToPeopleInRoom(input, playerList[i]);
-                        }
-                    }
+                    //Gets the current player then gives the message to all over players in the same room.
+                    SpeakToPeopleInRoom(input, GetCurrentPlayer(chatClient));
                     break;
                 case "rename":
+                    //Changes the users name to their input.
                     Rename(chatClient, input[1]);
                     break;
                 case "players":
+                    //Gets a list of players and player locations and displays them to the user.
                     SendPrivateMessage(chatClient, "Server", DisplayPlayerLocations());
                     break;
                 default:
+                    //The command from the player is invalid so an error message is shown.
                     SendPrivateMessage(chatClient, "Server", "ERROR");
-                    SendPrivateMessage(chatClient, "Server", "That is not a form of input");
+                    SendPrivateMessage(chatClient, "Server", "That is not a valid form of input");
                     break;
             }
         }
@@ -439,6 +387,21 @@ namespace Server
             }
         }
 
+        static Player GetCurrentPlayer(Socket serverClient)
+        {
+            Player thisPlayer = null;
+
+            for (int i = 0; i < playerList.Count; i++)
+            {
+                if (playerList[i].owner == serverClient)
+                {
+                    thisPlayer = playerList[i];
+                }
+            }
+
+            return thisPlayer;
+        }
+
         static void Main(string[] args)
         {
             Socket serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
@@ -452,6 +415,7 @@ namespace Server
 
             while (!bQuit)
             {
+                //Accepts a new client.
                 Socket serverClient = serverSocket.Accept();
 
                 Thread myThread = new Thread(receiveClientProcess);
@@ -463,17 +427,14 @@ namespace Server
                     clientDictionary.Add(clientName, serverClient);
 
                     OnConnect();
-
+                    //Adds the new player to the list of players.
                     playerList.Add(new Player(serverClient,clientName, dungeon.roomMap.ElementAt(0).Value));
 
+
+                    //Goes through each player to get the current player.
                     Player currPlayer = null;
-                    for(int i = 0; i < playerList.Count; i++)
-                    {
-                        if(playerList[i].owner == serverClient)
-                        {
-                            currPlayer = playerList[i];
-                        }
-                    }
+                    currPlayer = GetCurrentPlayer(serverClient);
+                    //Sends a starting message to the new player
                     SendPrivateMessage(currPlayer.owner, "Server", "You start in " + currPlayer.currRoom.Name + ". " + currPlayer.currRoom.description + " " + DisplayPlayerLocations());
                     
                     SendClientName(serverClient, clientName);

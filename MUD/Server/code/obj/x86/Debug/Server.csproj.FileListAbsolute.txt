@@ -14,3 +14,11 @@ D:\miKu\COMP260MUD\MUD\Server\code\obj\x86\Debug\Server.csprojResolveAssemblyRef
 D:\miKu\COMP260MUD\MUD\Server\code\obj\x86\Debug\Server.csproj.CoreCompileInputs.cache
 D:\miKu\COMP260MUD\MUD\Server\code\obj\x86\Debug\Server.exe
 D:\miKu\COMP260MUD\MUD\Server\code\obj\x86\Debug\Server.pdb
+C:\Users\Max\Desktop\GitHub\SecondYear\Comp260\COMP260MUD\MUD\Server\code\bin\Debug\Server.exe
+C:\Users\Max\Desktop\GitHub\SecondYear\Comp260\COMP260MUD\MUD\Server\code\bin\Debug\Server.pdb
+C:\Users\Max\Desktop\GitHub\SecondYear\Comp260\COMP260MUD\MUD\Server\code\bin\Debug\MessageTypes.dll
+C:\Users\Max\Desktop\GitHub\SecondYear\Comp260\COMP260MUD\MUD\Server\code\bin\Debug\MessageTypes.pdb
+C:\Users\Max\Desktop\GitHub\SecondYear\Comp260\COMP260MUD\MUD\Server\code\obj\x86\Debug\Server.csprojResolveAssemblyReference.cache
+C:\Users\Max\Desktop\GitHub\SecondYear\Comp260\COMP260MUD\MUD\Server\code\obj\x86\Debug\Server.csproj.CoreCompileInputs.cache
+C:\Users\Max\Desktop\GitHub\SecondYear\Comp260\COMP260MUD\MUD\Server\code\obj\x86\Debug\Server.exe
+C:\Users\Max\Desktop\GitHub\SecondYear\Comp260\COMP260MUD\MUD\Server\code\obj\x86\Debug\Server.pdb
