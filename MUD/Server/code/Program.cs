@@ -7,6 +7,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using System.IO;
+using System.Data.SQLite;
 
 using MessageTypes;
 
@@ -23,6 +24,181 @@ namespace Server
         static Dungeon dungeon = new Dungeon();
 
         static bool firstPlayerHasConnect = false;
+
+        static SQLiteConnection conn = null;
+
+        static void CreateNewDatabase(String DBName)
+        {
+            try
+            {
+                SQLiteConnection.CreateFile(DBName);
+
+                conn = new SQLiteConnection("Data Source =" + DBName + ";Version=3;FailIfMissing=True");
+
+                SQLiteCommand command;
+
+                conn.Open();
+                List<string> dbVars = new List<string>();
+                bool noMoreDBVariables = false;
+                while(!noMoreDBVariables)
+                {
+                    Console.WriteLine("Enter the sql code for the variable. Type 'exit' when you are done and hit enter.");
+                    string newVar = Console.ReadLine();
+                    if (newVar == "exit")
+                    {
+                        noMoreDBVariables = true;
+                    }else { dbVars.Add(newVar); }
+                }
+
+                string sqlCommand = "create table table_" + DBName + "(";
+                for(int i = 0; i < dbVars.Count; i++)
+                {
+                    sqlCommand += dbVars[i];
+                    if (i < dbVars.Count - 1){ sqlCommand += ","; }
+                }
+                sqlCommand += ")";
+
+                Console.WriteLine(sqlCommand);
+
+                command = new SQLiteCommand(sqlCommand, conn);
+                command.ExecuteNonQuery();
+                Console.WriteLine("Database " + DBName + " has been created");
+            }catch(Exception e)
+            {
+                Console.WriteLine("Failed to create database: " + e);
+            }
+        }
+
+        static void OpenDatabase(String DBname)
+        {
+            conn = new SQLiteConnection("Data Source=" + DBname + ";Version=3;FailIfMissing=True"); ;
+
+            try
+            {
+                conn.Open();
+                Console.WriteLine("Database connection to " + DBname + " established");
+            }catch(Exception e)
+            {
+                Console.WriteLine("Failed to open database: " + e);
+            }
+        }
+
+        static void AddEntry(String DBName)
+        {
+            try
+            {
+                //Read columns in database and ask for vaiables to fill these.
+                SQLiteCommand comm = new SQLiteCommand("select * from table_" + DBName, conn);
+                SQLiteDataReader read = comm.ExecuteReader();
+                List<String> entryVars = new List<String>();
+                List<String> columnNames = new List<String>();
+
+                for(int i = 0; i < read.FieldCount; i++)
+                {
+                    columnNames.Add(read.GetName(i));
+                    Console.WriteLine("Please enter "+ read.GetName(i));
+                    entryVars.Add(Console.ReadLine());
+                }
+
+                comm = new SQLiteCommand("select * from table_" + DBName + " where " + columnNames[0] + " == '" + entryVars[0] + "'", conn);
+                read = comm.ExecuteReader();
+
+                if(!read.HasRows)
+                {
+                    try
+                    {
+                        String sql = "insert into table_" + DBName + " (";
+                        for(int i = 0; i < columnNames.Count; i++)
+                        {
+                            sql += columnNames[i];
+                            if (i < columnNames.Count - 1) { sql += ", "; }
+                        }
+                        sql += ") values";
+                        sql += "(";
+                        for(int i = 0; i < entryVars.Count; i++)
+                        {
+                            sql += "'" + entryVars[i] + "'";
+                            if (i < entryVars.Count - 1) { sql += ","; }
+                        }
+
+                        sql += ")";
+
+                        comm = new SQLiteCommand(sql, conn);
+                        comm.ExecuteNonQuery();
+
+                    }catch (Exception e)
+                    {
+                        Console.WriteLine("Could not add to database : " + e);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Failed to create entry: " + e);
+            }
+        }
+
+        static void DisplayAllEntries(String dbName)
+        {
+            try
+            {
+                //Read columns
+                SQLiteCommand comm = new SQLiteCommand("select * from table_" + dbName, conn);
+                SQLiteDataReader read = comm.ExecuteReader();
+                List<String> columnNames = new List<String>();
+
+                for (int i = 0; i < read.FieldCount; i++)
+                {
+                    columnNames.Add(read.GetName(i));
+                }
+
+                Console.WriteLine("");
+                SQLiteCommand command = new SQLiteCommand("select * from table_" + dbName + " order by name asc", conn);
+                SQLiteDataReader reader = command.ExecuteReader();
+
+
+
+                while(reader.Read())
+                {
+                    String output = null;
+                    for(int i = 0; i < columnNames.Count; i++)
+                    {
+                        output += columnNames[i] + ": " + reader[columnNames[i]] + "\t";
+                    }
+
+                    Console.WriteLine(output);
+                }
+                reader.Close();
+                Console.WriteLine("");
+            } catch (Exception e)
+            {
+                Console.WriteLine("Unable to display current entires : " + e);
+            }
+        }
+
+        static void DeleteEntry(string dbName)
+        {
+            try
+            {
+                Console.WriteLine("Enter the name of the entry you wish to delete");
+                string name = Console.ReadLine();
+
+                SQLiteCommand command = new SQLiteCommand("delete from table_" + dbName + " where name == '" + name + "'", conn);
+                SQLiteDataReader reader = command.ExecuteReader();
+
+                if(reader.RecordsAffected > 0)
+                {
+                    Console.WriteLine("Deleted: " + name);
+                }else
+                {
+                    Console.WriteLine("Not in DB: " + name);
+                }
+
+            }catch(Exception e)
+            {
+                Console.WriteLine("Failed to delete entry: " + e);
+            }
+        }
 
         //Returns a string containg players names and locations in the dungeon.
         static string DisplayPlayerLocations()
@@ -402,16 +578,73 @@ namespace Server
             return thisPlayer;
         }
 
+        static String AskForDBName()
+        {
+            Console.WriteLine("Please input the database name");
+            string dbName = Console.ReadLine();
+
+            return dbName;
+        }
+
         static void Main(string[] args)
         {
-            Socket serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            bool finishedWithDatabase = false;
+            string dbName = null;
+            while (!finishedWithDatabase)
+            {
+                //Allow access to the database
+                Console.WriteLine("You have started the server.");
+                Console.WriteLine("You currently can perform maintanenece on the database.");
+                Console.WriteLine("Here are the options");
+                Console.WriteLine("1 - create database");
+                Console.WriteLine("2 - Open database");
+                Console.WriteLine("3 - Add entry to database");
+                Console.WriteLine("4 - Display all entries");
+                Console.WriteLine("5 - Delete entry");
+                Console.WriteLine("Exit - Finish with database");
 
+                String action = Console.ReadLine();
+
+
+                switch (action)
+                {
+                    //Create database
+                    case "1":
+                        dbName = AskForDBName();
+                        CreateNewDatabase(dbName);
+                    break;
+                    case "2":
+                        dbName = AskForDBName();
+                        OpenDatabase(dbName);
+                        break;
+                    case "3":
+                        AddEntry(dbName);
+                        break;
+                    case "4":
+                        DisplayAllEntries(dbName);
+                        break;
+                    case "5":
+                        DeleteEntry(dbName);
+                        break;
+                    case "exit":
+                        finishedWithDatabase = true;
+                        break;
+                    default:
+                        Console.WriteLine("That was not valid. Please try again.");
+                    break;
+                }
+            }
+
+            //Do server stuff
+            Socket serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            //165.227.230.143
+            //127.0.0.1
             serverSocket.Bind(new IPEndPoint(IPAddress.Parse("127.0.0.1"), 8500));
             serverSocket.Listen(32);
 
             bool bQuit = false;
 
-            Console.WriteLine("Server");
+            Console.WriteLine("Server Online");
 
             while (!bQuit)
             {

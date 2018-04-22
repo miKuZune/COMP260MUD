@@ -56,7 +56,7 @@ namespace Server
 
                 try
                 {
-                    chatClient.Connect(new IPEndPoint(IPAddress.Parse("127.0.0.1"), 8500));
+                    chatClient.Connect(new IPEndPoint(IPAddress.Parse("165.227.230.143"), 8500));
                     bConnected = true;
                 }
                 catch (System.Exception ex)

@@ -9,3 +9,9 @@ D:\miKu\COMP260MUD\MUD\MessageTypes\obj\Debug\MessageTypes.csprojResolveAssembly
 D:\miKu\COMP260MUD\MUD\MessageTypes\obj\Debug\MessageTypes.csproj.CoreCompileInputs.cache
 D:\miKu\COMP260MUD\MUD\MessageTypes\obj\Debug\MessageTypes.dll
 D:\miKu\COMP260MUD\MUD\MessageTypes\obj\Debug\MessageTypes.pdb
+C:\Users\Max\Desktop\GitHub\SecondYear\Comp260\COMP260MUD\MUD\MessageTypes\bin\Debug\MessageTypes.dll
+C:\Users\Max\Desktop\GitHub\SecondYear\Comp260\COMP260MUD\MUD\MessageTypes\bin\Debug\MessageTypes.pdb
+C:\Users\Max\Desktop\GitHub\SecondYear\Comp260\COMP260MUD\MUD\MessageTypes\obj\Debug\MessageTypes.csprojResolveAssemblyReference.cache
+C:\Users\Max\Desktop\GitHub\SecondYear\Comp260\COMP260MUD\MUD\MessageTypes\obj\Debug\MessageTypes.csproj.CoreCompileInputs.cache
+C:\Users\Max\Desktop\GitHub\SecondYear\Comp260\COMP260MUD\MUD\MessageTypes\obj\Debug\MessageTypes.dll
+C:\Users\Max\Desktop\GitHub\SecondYear\Comp260\COMP260MUD\MUD\MessageTypes\obj\Debug\MessageTypes.pdb

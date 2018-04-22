@@ -22,3 +22,14 @@ C:\Users\Max\Desktop\GitHub\SecondYear\Comp260\COMP260MUD\MUD\Server\code\obj\x8
 C:\Users\Max\Desktop\GitHub\SecondYear\Comp260\COMP260MUD\MUD\Server\code\obj\x86\Debug\Server.csproj.CoreCompileInputs.cache
 C:\Users\Max\Desktop\GitHub\SecondYear\Comp260\COMP260MUD\MUD\Server\code\obj\x86\Debug\Server.exe
 C:\Users\Max\Desktop\GitHub\SecondYear\Comp260\COMP260MUD\MUD\Server\code\obj\x86\Debug\Server.pdb
+C:\Users\Max\Desktop\GitHub\SecondYear\Comp260\COMP260MUD\MUD\Server\code\obj\x86\Debug\Server.csproj.CopyComplete
+C:\Users\Max\Desktop\GitHub\SecondYear\Comp260\COMP260MUD\MUD\Server\code\bin\Debug\Server.exe.config
+C:\Users\Max\Desktop\GitHub\SecondYear\Comp260\COMP260MUD\MUD\Server\code\bin\Debug\EntityFramework.dll
+C:\Users\Max\Desktop\GitHub\SecondYear\Comp260\COMP260MUD\MUD\Server\code\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\Max\Desktop\GitHub\SecondYear\Comp260\COMP260MUD\MUD\Server\code\bin\Debug\System.Data.SQLite.dll
+C:\Users\Max\Desktop\GitHub\SecondYear\Comp260\COMP260MUD\MUD\Server\code\bin\Debug\System.Data.SQLite.EF6.dll
+C:\Users\Max\Desktop\GitHub\SecondYear\Comp260\COMP260MUD\MUD\Server\code\bin\Debug\System.Data.SQLite.Linq.dll
+C:\Users\Max\Desktop\GitHub\SecondYear\Comp260\COMP260MUD\MUD\Server\code\bin\Debug\EntityFramework.xml
+C:\Users\Max\Desktop\GitHub\SecondYear\Comp260\COMP260MUD\MUD\Server\code\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\Max\Desktop\GitHub\SecondYear\Comp260\COMP260MUD\MUD\Server\code\bin\Debug\System.Data.SQLite.xml
+C:\Users\Max\Desktop\GitHub\SecondYear\Comp260\COMP260MUD\MUD\Server\code\bin\Debug\System.Data.SQLite.dll.config

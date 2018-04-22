@@ -19,3 +19,15 @@ D:\miKu\COMP260MUD\MUD\Winform Client\Winform Client\obj\x86\Debug\Winform Clien
 D:\miKu\COMP260MUD\MUD\Winform Client\Winform Client\obj\x86\Debug\Winform Client.csproj.CoreCompileInputs.cache
 D:\miKu\COMP260MUD\MUD\Winform Client\Winform Client\obj\x86\Debug\Winform Client.exe
 D:\miKu\COMP260MUD\MUD\Winform Client\Winform Client\obj\x86\Debug\Winform Client.pdb
+C:\Users\Max\Desktop\GitHub\SecondYear\Comp260\COMP260MUD\MUD\Winform Client\Winform Client\bin\Debug\Winform Client.exe
+C:\Users\Max\Desktop\GitHub\SecondYear\Comp260\COMP260MUD\MUD\Winform Client\Winform Client\bin\Debug\Winform Client.pdb
+C:\Users\Max\Desktop\GitHub\SecondYear\Comp260\COMP260MUD\MUD\Winform Client\Winform Client\bin\Debug\MessageTypes.dll
+C:\Users\Max\Desktop\GitHub\SecondYear\Comp260\COMP260MUD\MUD\Winform Client\Winform Client\bin\Debug\MessageTypes.pdb
+C:\Users\Max\Desktop\GitHub\SecondYear\Comp260\COMP260MUD\MUD\Winform Client\Winform Client\obj\x86\Debug\Winform Client.csprojResolveAssemblyReference.cache
+C:\Users\Max\Desktop\GitHub\SecondYear\Comp260\COMP260MUD\MUD\Winform Client\Winform Client\obj\x86\Debug\Winform_Client.Form1.resources
+C:\Users\Max\Desktop\GitHub\SecondYear\Comp260\COMP260MUD\MUD\Winform Client\Winform Client\obj\x86\Debug\Winform_Client.Properties.Resources.resources
+C:\Users\Max\Desktop\GitHub\SecondYear\Comp260\COMP260MUD\MUD\Winform Client\Winform Client\obj\x86\Debug\Winform Client.csproj.GenerateResource.cache
+C:\Users\Max\Desktop\GitHub\SecondYear\Comp260\COMP260MUD\MUD\Winform Client\Winform Client\obj\x86\Debug\Winform Client.csproj.CoreCompileInputs.cache
+C:\Users\Max\Desktop\GitHub\SecondYear\Comp260\COMP260MUD\MUD\Winform Client\Winform Client\obj\x86\Debug\Winform Client.csproj.CopyComplete
+C:\Users\Max\Desktop\GitHub\SecondYear\Comp260\COMP260MUD\MUD\Winform Client\Winform Client\obj\x86\Debug\Winform Client.exe
+C:\Users\Max\Desktop\GitHub\SecondYear\Comp260\COMP260MUD\MUD\Winform Client\Winform Client\obj\x86\Debug\Winform Client.pdb
