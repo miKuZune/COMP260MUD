@@ -153,10 +153,8 @@ namespace Server
                 }
 
                 Console.WriteLine("");
-                SQLiteCommand command = new SQLiteCommand("select * from table_" + dbName + " order by name asc", conn);
+                SQLiteCommand command = new SQLiteCommand("select * from table_" + dbName + " order by " + columnNames[0] + " asc", conn);
                 SQLiteDataReader reader = command.ExecuteReader();
-
-
 
                 while(reader.Read())
                 {
@@ -219,7 +217,7 @@ namespace Server
             {
                 if(currPlayer == playerList[i].owner)
                 {
-                    SendChatMessage(playerList[i].name + " is now called " + newName);
+                    //SendChatMessage(playerList[i].name + " is now called " + newName);
                     playerList[i].name = newName;
                 }
             }
@@ -445,15 +443,115 @@ namespace Server
             return indent;
         }
         
+        static Boolean CheckIfLoggedIn(string clientName)
+        {
+            bool isLoggedIn = false;
+
+            conn = new SQLiteConnection("Data Source = PlayerDB;Version=3;FailIfMissing=True");
+            conn.Open();
+            SQLiteCommand comm = new SQLiteCommand("SELECT isLoggedIn FROM table_PlayerDB WHERE Username='" + clientName +"';", conn);
+
+            SQLiteDataReader read = comm.ExecuteReader();
+            string output = null;
+            int i = 0;
+            while (read.Read())
+            {
+                output += read[i];
+                i++;
+
+            }
+
+
+
+            if(output != null)
+            {
+                if(output.ToLower() == "true")
+                {
+                    isLoggedIn = true;
+                }else
+                {
+                    isLoggedIn = false;
+                }
+            }else
+            {
+                //Console.WriteLine("This player does not exist I guess");
+            }
+
+
+            return isLoggedIn;
+        }
+
+        static void AttemptToLogin(string[] input, Socket client)
+        {
+            string username = input[1];
+            string password = input[2];
+            string output = "";
+
+            conn = conn = new SQLiteConnection("Data Source = PlayerDB;Version=3;FailIfMissing=True");
+            conn.Open();
+            SQLiteCommand comm = new SQLiteCommand("SELECT Password FROM table_PlayerDB WHERE Username='" + username + "';", conn);
+            SQLiteDataReader read = comm.ExecuteReader();
+
+            int i = 0; 
+            while(read.Read())
+            {
+                output += read[i];
+                i++;
+            }
+
+            if(output == password)
+            {
+                DatabaseLogin(username);
+                Rename(client, username);
+                SendPrivateMessage(client, "Server", "You have now logged in!");
+            }
+            else
+            {
+                SendPrivateMessage(client, "Server", "Sorry but your username or password is incorrect. Please Try again");
+            }
+        }
+
+        static void DatabaseLogin(string username)
+        {
+            conn = conn = new SQLiteConnection("Data Source = PlayerDB;Version=3;FailIfMissing=True");
+            conn.Open();
+            SQLiteCommand comm = new SQLiteCommand("UPDATE table_PlayerDB SET isLoggedIn = 'true'  WHERE Username ='" + username + "';", conn);
+            comm.ExecuteNonQuery();
+        }
+
+        static void DatabaseLogout(string username)
+        {
+            conn = conn = new SQLiteConnection("Data Source = PlayerDB;Version=3;FailIfMissing=True");
+            conn.Open();
+            SQLiteCommand comm = new SQLiteCommand("UPDATE table_PlayerDB SET isLoggedIn = 'false'  WHERE Username ='" + username + "';", conn);
+            comm.ExecuteNonQuery();
+        }
+
         //Takes players input and performs appropriate commands if valid.    
         static void CommandStates(string[] input, Socket chatClient)
         {
+            //Check if the player is currently logged in.
+
+            if(!CheckIfLoggedIn(GetCurrentPlayer(chatClient).name))
+            {  
+                switch(input[0])
+                {
+                    case "login":
+                        AttemptToLogin(input, chatClient);
+                        break;
+                    default:
+                        SendPrivateMessage(chatClient, "Server", "You are not logged in. Try Login 'username' 'password'");
+                        break;
+                }
+                return;
+            }
+
             switch(input[0])
             {
                 case "help":
                     //Gives the player a message containing all the possible commands
                     SendPrivateMessage(chatClient, "Server", "The commands are: " );
-                    SendPrivateMessage(chatClient, "Server", "Go [direction] - Moves in given direction; Say [Text to say] - writes to all players; rename [New name] - gives yourself a new name; players - displays all current players names and locations; attack [enemy name] - attacks the enemy chosen");
+                    SendPrivateMessage(chatClient, "Server", "Go [direction] - Moves in given direction; Say [Text to say] - writes to all players; rename [New name] - gives yourself a new name; players - displays all current players names and locations; attack [enemy name] - attacks the enemy chosen; Logout - logs you out of the game");
                     break;
                 case "attack":
                     //Gets the current player then trys to attack the chosen enemy.
@@ -474,6 +572,11 @@ namespace Server
                 case "players":
                     //Gets a list of players and player locations and displays them to the user.
                     SendPrivateMessage(chatClient, "Server", DisplayPlayerLocations());
+                    break;
+                case "logout":
+                    DatabaseLogout(GetCurrentPlayer(chatClient).name);
+                    Rename(chatClient, "clientX");
+                    SendPrivateMessage(chatClient, "Server", "You have logged out");
                     break;
                 default:
                     //The command from the player is invalid so an error message is shown.
@@ -556,7 +659,11 @@ namespace Server
                     Console.WriteLine(output);
                     SendChatMessage(output);
 
+                    DatabaseLogout(GetCurrentPlayer(chatClient).name);
+                    playerList.Remove(GetCurrentPlayer(chatClient));
+
                     RemoveClientBySocket(chatClient);
+                    
 
                     SendClientList();
                 }
@@ -601,6 +708,7 @@ namespace Server
                 Console.WriteLine("3 - Add entry to database");
                 Console.WriteLine("4 - Display all entries");
                 Console.WriteLine("5 - Delete entry");
+                Console.WriteLine("6 - Test ");
                 Console.WriteLine("Exit - Finish with database");
 
                 String action = Console.ReadLine();
@@ -625,6 +733,9 @@ namespace Server
                         break;
                     case "5":
                         DeleteEntry(dbName);
+                        break;
+                    case "6":
+                        DatabaseLogout("miKuZune");
                         break;
                     case "exit":
                         finishedWithDatabase = true;
@@ -668,7 +779,8 @@ namespace Server
                     Player currPlayer = null;
                     currPlayer = GetCurrentPlayer(serverClient);
                     //Sends a starting message to the new player
-                    SendPrivateMessage(currPlayer.owner, "Server", "You start in " + currPlayer.currRoom.Name + ". " + currPlayer.currRoom.description + " " + DisplayPlayerLocations());
+                    SendPrivateMessage(currPlayer.owner, "Server", "Please enter your username");
+                    //SendPrivateMessage(currPlayer.owner, "Server", "You start in " + currPlayer.currRoom.Name + ". " + currPlayer.currRoom.description + " " + DisplayPlayerLocations());
                     
                     SendClientName(serverClient, clientName);
                     Thread.Sleep(500);
