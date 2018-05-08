@@ -13,6 +13,7 @@ using System.Threading;
 using System.IO;
 
 using MessageTypes;
+using System.Security.Cryptography;
 
 namespace Winform_Client
 {
@@ -25,6 +26,41 @@ namespace Winform_Client
 
         List<String> currentClientList = new List<String>();
 
+        //Creates a random hash based on the current time.
+        static String CreateHash()
+        {
+            String hash = "";
+            int charsInHash = 16;
+            Char[] potentialHashChars = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '1', '2', '3', '4' };
+
+            DateTime currTime = DateTime.Now;
+            int timeSeed = currTime.Minute + currTime.Second;
+
+            Random rand = new Random(timeSeed);
+            for(int i = 0; i < charsInHash; i++)
+            {
+                int hashCharsID = rand.Next(0, potentialHashChars.Length);
+                hash += potentialHashChars[hashCharsID];
+            }
+
+            return hash;
+        }
+
+        //Encrypts a given string using a given hash.
+        static String Encrypt(String toEncrypt, String hash)
+        {
+            byte[] data = UTF32Encoding.UTF8.GetBytes(toEncrypt);
+            using (MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider())
+            {
+                byte[] keys = md5.ComputeHash(UTF8Encoding.UTF8.GetBytes(hash));
+                using (TripleDESCryptoServiceProvider tripDes = new TripleDESCryptoServiceProvider() { Key = keys, Mode = CipherMode.ECB, Padding = PaddingMode.PKCS7 })
+                {
+                    ICryptoTransform crytTransform = tripDes.CreateEncryptor();
+                    byte[] results = crytTransform.TransformFinalBlock(data, 0, data.Length);
+                    return Convert.ToBase64String(results, 0, results.Length);
+                }
+            }
+        }
 
         static void clientProcess(Object o)
         {            
@@ -37,7 +73,7 @@ namespace Winform_Client
                     form.client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                     //165.227.230.143
                     //127.0.0.1
-                    form.client.Connect(new IPEndPoint(IPAddress.Parse("127.0.0.1"), 8500));
+                    form.client.Connect(new IPEndPoint(IPAddress.Parse("165.227.230.143"), 8500));
                     form.bConnected = true;
                     form.AddText("Connected to server");
 
@@ -207,7 +243,16 @@ namespace Winform_Client
                     {
                         PublicChatMsg publicMsg = new PublicChatMsg();
 
-                        publicMsg.msg = textBox_Input.Text;
+                        //Takes the users input and encrypts it with a random time based hash.
+                        String usersInput = textBox_Input.Text;
+                            //Getting hash and creating encrypted text.
+                        String hash = CreateHash();
+                        String encodedMessage = Encrypt(usersInput, hash);
+
+                        //Groups together the encrypted message and the hash and sends both of them to the server.
+                        String msgToSend = encodedMessage + " " + hash;
+
+                        publicMsg.msg = msgToSend;
                         MemoryStream outStream = publicMsg.WriteData();
                         client.Send(outStream.GetBuffer());                
                     }
